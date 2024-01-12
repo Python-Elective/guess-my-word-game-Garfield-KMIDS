@@ -49,14 +49,20 @@ def is_word_guessed(secret_word, letters_guessed):
     returns: boolean, True if all the letters of secret_word are in letters_guessed;
       False otherwise
     '''
-    # FILL IN YOUR CODE HERE...
-    pass
+    
+    for secret_letter in secret_word:
+        if (not secret_letter in letters_guessed): return False
+    return True
 
 
-### Testcases
-# print(is_word_guessed('apple', ['a', 'e', 'i', 'k', 'p', 'r', 's']))
-# print(is_word_guessed('durian', ['h', 'a', 'c', 'd', 'i', 'm', 'n', 'r', 't', 'u']))
-# print(is_word_guessed('pineapple', []))
+# ### Testcases
+assert is_word_guessed('apple', ['a', 'e', 'i', 'k', 'p', 'r', 's']) == False
+assert is_word_guessed('durian', ['h', 'a', 'c', 'd', 'i', 'm', 'n', 'r', 't', 'u']) == True
+assert is_word_guessed('carrot', ['b', 'g', 'd', 'z', 'w', 'y', 'v', 'm', 'i', 'k']) == False
+assert is_word_guessed('lettuce', ['k', 'v', 'a', 'e', 'n', 'd', 'b', 'f', 'u', 'c']) == False
+assert is_word_guessed ('pineapple', []) == False
+assert is_word_guessed ('mangosteen', ['z', 'x', 'q', 'm', 'a', 'n', 'g', 'o', 's', 't', 'e', 'e', 'n']) == True
+print('is_word_guessed Test passed!')
 
 
 
@@ -67,15 +73,20 @@ def get_guessed_word(secret_word, letters_guessed):
     returns: string, comprised of letters and underscores that represents
       what letters in secret_word have been guessed so far.
     '''
-    # FILL IN YOUR CODE HERE...
-    pass
-    
-    
+    return ''.join([secret_letter if secret_letter in letters_guessed else "_ " for secret_letter in secret_word]).strip()
     
       
-#Testcases
-# print(get_guessed_word('apple', ['e', 'i', 'k', 'p', 'r', 's']))
-# print(get_guessed_word('durian', ['a', 'c', 'd', 'h', 'i', 'm', 'n', 'r', 't', 'u']))
+# ### Testcases
+assert get_guessed_word('apple', ['e', 'i', 'k', 'p', 'r', 's']) == '_ pp_ e'
+assert get_guessed_word('durian', ['a', 'c', 'd', 'h', 'i', 'm', 'n', 'r', 't', 'u']) == 'durian'
+assert get_guessed_word('grapefruit', ['k', 'm', 'b', 'j', 'e', 'w', 's', 'z', 'u', 'x']) == '_ _ _ _ e_ _ u_ _'
+assert get_guessed_word('coconut', ['w', 'l', 'i', 'p', 'c', 'u', 'j', 'h', 'v', 'z']) == 'c_ c_ _ u_'
+assert get_guessed_word('banana', []) == '_ _ _ _ _ _'
+assert get_guessed_word('broccoli', ['e', 'c', 'g', 'u', 'r', 'x', 's', 'a', 'p', 'j']) == '_ r_ cc_ _ _'
+assert get_guessed_word('', ['e']) == ''
+print('get_guessed_word Test passed!')
+
+
 
 def get_available_letters(letters_guessed):
     '''
@@ -83,14 +94,20 @@ def get_available_letters(letters_guessed):
     returns: string, comprised of letters that represents what letters have not
       yet been guessed.
     '''
-    # FILL IN YOUR CODE HERE...   
-    pass
+    return ''.join([letter for letter in 'abcdefghijklmnopqrstuvwxyz' if not letter in letters_guessed])
+
+
+### Testcases 
+assert get_available_letters(['e', 'i', 'k', 'p', 'r', 's']) == 'abcdfghjlmnoqtuvwxyz'
+assert get_available_letters([]) == 'abcdefghijklmnopqrstuvwxyz'
+assert get_available_letters(['r', 'y', 'd', 'u', 't']) == 'abcefghijklmnopqsvwxz'
+assert get_available_letters(['t', 'w', 'v', 'b', 'k', 'n']) == 'acdefghijlmopqrsuxyz'
+assert get_available_letters(['a']) == 'bcdefghijklmnopqrstuvwxyz'
+assert get_available_letters(['p', 'r', 'f', 'd', 'k', 'h', 'c', 'a', 'i', 'y', 'w', 'b']) == 'egjlmnoqstuvxz'
+print('get_available_letters Test passed!')
 
 
 
-#Testcases 
-# print( get_available_letters(['e', 'i', 'k', 'p', 'r', 's']) )
-  
 def game_loop(secret_word):
     '''
     secret_word: string, the secret word to guess.
