@@ -5,9 +5,11 @@
 # but you will have to know how to use the functions
 # (so be sure to read the docstrings!)
 
+import os
 import random
 import string
 
+clear = lambda: os.system('cls')
 WORDLIST_FILENAME = "word_list.txt"
 
 def load_words():
@@ -55,7 +57,7 @@ def is_word_guessed(secret_word, letters_guessed):
     return True
 
 
-# ### Testcases
+### Testcases
 assert is_word_guessed('apple', ['a', 'e', 'i', 'k', 'p', 'r', 's']) == False
 assert is_word_guessed('durian', ['h', 'a', 'c', 'd', 'i', 'm', 'n', 'r', 't', 'u']) == True
 assert is_word_guessed('carrot', ['b', 'g', 'd', 'z', 'w', 'y', 'v', 'm', 'i', 'k']) == False
@@ -76,7 +78,7 @@ def get_guessed_word(secret_word, letters_guessed):
     return ''.join([secret_letter if secret_letter in letters_guessed else "_ " for secret_letter in secret_word]).strip()
     
       
-# ### Testcases
+### Testcases
 assert get_guessed_word('apple', ['e', 'i', 'k', 'p', 'r', 's']) == '_ pp_ e'
 assert get_guessed_word('durian', ['a', 'c', 'd', 'h', 'i', 'm', 'n', 'r', 't', 'u']) == 'durian'
 assert get_guessed_word('grapefruit', ['k', 'm', 'b', 'j', 'e', 'w', 's', 'z', 'u', 'x']) == '_ _ _ _ e_ _ u_ _'
@@ -94,7 +96,7 @@ def get_available_letters(letters_guessed):
     returns: string, comprised of letters that represents what letters have not
       yet been guessed.
     '''
-    return ''.join([letter for letter in 'abcdefghijklmnopqrstuvwxyz' if not letter in letters_guessed])
+    return ''.join([letter for letter in string.ascii_lowercase if not letter in letters_guessed])
 
 
 ### Testcases 
@@ -128,13 +130,44 @@ def game_loop(secret_word):
 
     Follows the other limitations detailed in the problem write-up.
     '''
-    # FILL IN YOUR CODE HERE...
-    pass
+    print('Let the game begin!')
+    print(f'I am thinking of a word with {len(secret_word)} letters.')
 
+    max_wrong_guess = 8
+
+    wrong_guess_count = 0
+    letters_guessed = []
+    while True:
+        print()
+
+        if wrong_guess_count >= max_wrong_guess:
+            print('You Lose!!! L + Ratio')
+            print(f'Reason: Your guess wrong more than {max_wrong_guess} letters!')
+            print(f'The word is: {secret_word}')
+            break
+
+        if is_word_guessed(secret_word, letters_guessed):
+            print(f'You Win!!! The word is: {get_guessed_word(secret_word, letters_guessed)}')
+            break
+
+        print(f'You have {max_wrong_guess - wrong_guess_count} guesses remaining.')
+        print(f'Letters available to you: {get_available_letters(letters_guessed)}')
+        guess = input('Guess a letter: ').lower()
+
+        if guess in letters_guessed:
+            print(f'You dumb****! You already try \'{guess}\': {get_guessed_word(secret_word, letters_guessed)}')
+        elif guess not in secret_word:
+            letters_guessed.append(guess)
+            print(f'Wrong! The letter \'{guess}\' is not in the word: {get_guessed_word(secret_word, letters_guessed)}')
+            wrong_guess_count += 1
+        else:
+            letters_guessed.append(guess)
+            print(f'Correct: {get_guessed_word(secret_word, letters_guessed)}')
 
 
 
 def main():
+    clear()
     secret_word = choose_word(word_list)
     game_loop(secret_word)
 
